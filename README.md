@@ -1,36 +1,91 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Collaborative Workspace Client
+
+Frontend for real-time collaborative rich-text editing using Next.js, Tiptap, Yjs, and Socket.io.
+
+## Features
+
+- Real-time collaborative editing
+- Shared cursor/presence awareness
+- Dynamic document routes (`/doc/:id`)
+- Live connection and save status
+- Tailwind-based UI
+
+## Tech Stack
+
+- Next.js (App Router)
+- React
+- Tiptap
+- Yjs
+- Socket.io Client
+- Tailwind CSS
+
+## Prerequisites
+
+- Node.js 18+
+- npm 9+
+- Running backend server (default: `http://localhost:3001`)
+
+## Environment Variables
+
+Create a `.env.local` file in the `client` folder:
+
+```env
+NEXT_PUBLIC_SERVER_URL=http://localhost:3001
+```
+
+If `NEXT_PUBLIC_SERVER_URL` is not provided, the app falls back to `http://localhost:3001` in parts of the app.
 
 ## Getting Started
 
-First, run the development server:
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `http://localhost:3000` (main collaborative page)
+- `http://localhost:3000/doc/your-document-id` (document room)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Scripts
 
-## Learn More
+- `npm run dev` - Run development server
+- `npm run build` - Build for production
+- `npm run start` - Start production build
+- `npm run lint` - Run ESLint
 
-To learn more about Next.js, take a look at the following resources:
+## Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```text
+client/
+	app/
+		page.tsx            # Collaborative workspace page
+		doc/[id]/page.js    # Dynamic document room
+	components/
+		EditorToolbar.js    # Editor formatting toolbar
+	hooks/
+		useSocket.js        # Socket connection hook
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## How Collaboration Works
 
-## Deploy on Vercel
+1. Client joins a document room through Socket.io.
+2. Yjs document updates are emitted to other clients in the same room.
+3. Awareness updates (presence/cursors) are broadcast in real time.
+4. Document state is debounced and sent to the server for persistence.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deployment Notes
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Set `NEXT_PUBLIC_SERVER_URL` to your deployed backend URL.
+- Ensure backend `CLIENT_ORIGIN` includes your deployed frontend origin.
+
+## License
+
+ISC
